@@ -11,8 +11,11 @@ if (false) {
 if (false) {
     queryArrayData().catch(err => console.log(err));
 }
-if (true) {
+if (false) {
     queryData2().catch(err => console.log(err)).finally(() => console.log("Press ctrl + c to end"));
+}
+if (true) {
+    updateData1().catch(err => console.log(err)).finally(() => console.log("Press ctrl + c to end"));
 }
 
 
@@ -37,6 +40,36 @@ async function queryData2() {
 
     console.timeEnd("MultipleQueries")
 }
+
+async function updateData1() {
+    await mongoose.connect(CS);
+    console.time("updateData1")
+    const i = 1
+    for(let j of testCases1) {
+        
+        const mongoQueryObj = {}
+        const mongoUpdateObj = {}
+        mongoQueryObj[`array1.x1`] = `Gaga${j}_${i}`
+        mongoUpdateObj[`array1.$[elem]`] = {
+            x1: `Gaga${j}_${i}`,
+        x2: 999,
+        x3: [10, 10, 10],
+        x4: "UPDATED"
+
+        }
+        const fArr = await FooArray.updateMany(mongoQueryObj,
+            mongoUpdateObj, {
+                arrayFilters: [ { "elem.x1": `Gaga${j}_${i}` } ]
+            })
+        if (fArr.matchedCount != 1) {
+            throw new Error("This should not happen")
+        }
+    }
+    
+
+    console.timeEnd("updateData1")
+}
+
 
 async function queryArrayData() {
     await mongoose.connect(CS);

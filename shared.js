@@ -8,5 +8,5 @@ const barFactory = function() {
     }
 }
 
-const testCases1 = [105, 110, 220, 300, 500, 700]
+const testCases1 = [1, 105, 110, 220, 300, 500, 700].map(i => i+1)
 module.exports = {myRNG, barFactory, testCases1}
